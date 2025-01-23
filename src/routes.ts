@@ -1,12 +1,26 @@
-import { Application } from 'express';
+import { Application, Request, Response } from 'express';
+
+interface shortUrlInterface {
+  original_url: string;
+  short_url: number;
+}
+
+const urls: shortUrlInterface[] = [];
 
 export const createRoutes = (app: Application) => {
   app.get('/', function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-  // Your first API endpoint
-  app.get('/api/hello', function (req, res) {
-    res.json({ greeting: 'hello API' });
+  app.get('/api/shorturl/:shorturl', function (req: Request, res: Response) {});
+
+  app.post('/api/shorturl', function (req: Request, res: Response) {
+    const url = req.body.url;
+    const content: shortUrlInterface = {
+      original_url: url,
+      short_url: urls.length + 1,
+    };
+    urls.push(content);
+    res.json(content);
   });
 };
