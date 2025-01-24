@@ -17,7 +17,15 @@ export const createRoutes = (app: Application) => {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-  app.get('/api/shorturl/:shorturl', function (req: Request, res: Response) {});
+  app.get('/api/shorturl/:shorturl', function (req: Request, res: Response) {
+    const short_url = parseInt(req.params.shorturl);
+    const url = urls.filter((url) => url.short_url === short_url);
+    if (url.length > 0) {
+      res.redirect(url[0].original_url);
+    } else {
+      res.json({ error: 'short url not found' });
+    }
+  });
 
   app.post('/api/shorturl', function (req: Request, res: Response) {
     const url = req.body.url;
